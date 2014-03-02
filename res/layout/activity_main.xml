@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+
+<ImageView 
+    android:id="@+id/main_image_id"
+    android:contentDescription="@string/content_description"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:layout_gravity="center_horizontal" 
+    android:src="@drawable/splash" />
+
+    
+</LinearLayout>

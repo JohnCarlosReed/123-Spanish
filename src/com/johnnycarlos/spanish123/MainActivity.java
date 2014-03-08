@@ -1,6 +1,5 @@
 package com.johnnycarlos.spanish123;
 
-import java.io.IOException;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-
 
 public class MainActivity extends Activity implements 
     GestureDetector.OnGestureListener,

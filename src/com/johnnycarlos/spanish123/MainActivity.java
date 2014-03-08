@@ -89,13 +89,14 @@ public class MainActivity extends Activity implements
 
             descriptor = assetManager.openFd("n9.ogg");
             SoundImage n9 = new SoundImage( soundPool.load(descriptor, 1), R.drawable.n9);
-
+            
             descriptor = assetManager.openFd("n10.ogg");
             SoundImage n10 = new SoundImage( soundPool.load(descriptor, 1), R.drawable.n10);
 
+            
             soundImages = new SoundImage[]{ n1, n2, n3, n4, n5, n6, n7, n8, n9, n10 };
         } 
-        catch(IOException e) {
+        catch(Exception e) {
            Log.d("loadSoundFiles Exception:", e.toString());
         }
     }

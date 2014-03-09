@@ -1,7 +1,10 @@
 package com.johnnycarlos.spanish123;
 
+import java.io.IOException;
+
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
@@ -39,6 +42,8 @@ public class MainActivity extends Activity implements
 	
         super.onCreate(savedInstanceState);
 
+        Log.d("loadSoundFiles", "onCreate");
+        
         setContentView(R.layout.activity_main);
 
         mDetector = new GestureDetectorCompat(this,this);
@@ -47,12 +52,47 @@ public class MainActivity extends Activity implements
         
         soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
 
-        loadSoundImages();
+        loadBackgroundMusic();
+                
+        loadSoundImages();        
        
         imageView = (ImageView)findViewById(R.id.main_image_id);
 
     } 
    
+    private void loadBackgroundMusic(){
+     
+        try {
+
+            AssetManager assetManager = getAssets();
+            AssetFileDescriptor descriptor;            
+            descriptor = assetManager.openFd("bg.ogg");
+            final int bgSound = soundPool.load(descriptor, 1);
+            
+            soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int sampleId,
+                    int status) {
+                    soundPool.play(bgSound, 1, 1, 0, -1, 1);
+                }
+            });
+            
+                
+            Log.d("loadSoundFiles", " we got here");
+            
+;
+                        
+            
+            
+            Log.d("loadSoundFiles", "Why didnt you play????: " + bgSound);
+
+            
+        } catch (Exception e) {
+            Log.d("loadSoundFiles Exception:", e.toString());
+        }
+    }
+
+    
     /**
      * This method loads all the SoundImages into a global array.
      */

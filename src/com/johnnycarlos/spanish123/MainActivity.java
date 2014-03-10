@@ -83,16 +83,13 @@ public class MainActivity extends Activity implements
                 @Override
                 public void onLoadComplete(SoundPool soundPool, int sampleId,
                     int status) {
-                    //plays loop
-                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);
-                    
-                    // plays once
-                    //bgStreamID = soundPool.play(bgSound, 1, 1, 0, 0, 1);
+                    //play sound loop
+                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);                    
                 }
             });
              
         } catch (Exception e) {
-            Log.d("loadSoundFiles Exception:", e.toString());
+            Log.d("loadBackgroundMusic Exception:", e.toString());
         }
     }
 

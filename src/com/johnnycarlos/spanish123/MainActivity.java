@@ -52,6 +52,8 @@ public class MainActivity extends Activity implements
                 
         loadSoundImages();        
        
+        loadBackgroundMusic();
+        
         imageView = (ImageView)findViewById(R.id.main_image_id);
 
     } 
@@ -59,7 +61,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-        loadBackgroundMusic();
     }
     
     @Override
@@ -82,10 +83,10 @@ public class MainActivity extends Activity implements
                 public void onLoadComplete(SoundPool soundPool, int sampleId,
                     int status) {
                     //plays loop
-                    //bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);
+                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);
                     
                     // plays once
-                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, 0, 1);
+                    //bgStreamID = soundPool.play(bgSound, 1, 1, 0, 0, 1);
                 }
             });
              

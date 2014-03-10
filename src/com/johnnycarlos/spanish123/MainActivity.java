@@ -61,12 +61,13 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        soundPool.resume(bgStreamID);
     }
     
     @Override
     protected void onPause() {
         super.onPause();        
-        soundPool.stop(bgStreamID);
+        soundPool.pause(bgStreamID);
     }
 
     private void loadBackgroundMusic(){

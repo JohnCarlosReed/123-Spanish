@@ -1,7 +1,5 @@
 package com.johnnycarlos.spanish123;
 
-import java.io.IOException;
-
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
@@ -35,31 +33,41 @@ public class MainActivity extends Activity implements
     private SoundImage[] soundImages;
     
     private int index = -1;
+    
+    private int bgStreamID;
               
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	
         super.onCreate(savedInstanceState);
-
-        Log.d("loadSoundFiles", "onCreate");
         
         setContentView(R.layout.activity_main);
-
+ 
         mDetector = new GestureDetectorCompat(this,this);
 
         mDetector.setOnDoubleTapListener(this);
         
         soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
-
-        loadBackgroundMusic();
                 
         loadSoundImages();        
        
         imageView = (ImageView)findViewById(R.id.main_image_id);
 
     } 
-   
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadBackgroundMusic();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();        
+        soundPool.stop(bgStreamID);
+    }
+
     private void loadBackgroundMusic(){
      
         try {
@@ -68,25 +76,19 @@ public class MainActivity extends Activity implements
             AssetFileDescriptor descriptor;            
             descriptor = assetManager.openFd("bg.ogg");
             final int bgSound = soundPool.load(descriptor, 1);
-            
+        
             soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
                 @Override
                 public void onLoadComplete(SoundPool soundPool, int sampleId,
                     int status) {
-                    soundPool.play(bgSound, 1, 1, 0, -1, 1);
+                    //plays loop
+                    //bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);
+                    
+                    // plays once
+                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, 0, 1);
                 }
             });
-            
-                
-            Log.d("loadSoundFiles", " we got here");
-            
-;
-                        
-            
-            
-            Log.d("loadSoundFiles", "Why didnt you play????: " + bgSound);
-
-            
+             
         } catch (Exception e) {
             Log.d("loadSoundFiles Exception:", e.toString());
         }

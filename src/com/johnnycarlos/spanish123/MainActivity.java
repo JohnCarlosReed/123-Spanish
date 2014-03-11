@@ -48,7 +48,7 @@ public class MainActivity extends Activity implements
 
         mDetector.setOnDoubleTapListener(this);
         
-        soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
+        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
                 
         loadSoundImages();        
        
@@ -83,8 +83,8 @@ public class MainActivity extends Activity implements
                 @Override
                 public void onLoadComplete(SoundPool soundPool, int sampleId,
                     int status) {
-                    //play sound loop
-                    bgStreamID = soundPool.play(bgSound, 1, 1, 0, -1, 1);                    
+                    //play sound loop 
+                    bgStreamID = soundPool.play(bgSound, (float).5, (float).5, 0, -1, 1);                    
                 }
             });
              

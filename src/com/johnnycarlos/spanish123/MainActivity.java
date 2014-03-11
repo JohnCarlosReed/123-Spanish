@@ -1,8 +1,8 @@
 package com.johnnycarlos.spanish123;
 
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
@@ -34,8 +34,7 @@ public class MainActivity extends Activity implements
     
     private int index = -1;
     
-    private int bgStreamID;
-              
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,13 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
- 
+        
+        // TODO:  Move MediaPlayer to a separate thread
+        mediaPlayer = MediaPlayer.create(this, R.raw.background_music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.setVolume((float).3, (float).3);
+        mediaPlayer.start(); 
+
         mDetector = new GestureDetectorCompat(this,this);
 
         mDetector.setOnDoubleTapListener(this);
@@ -52,8 +57,6 @@ public class MainActivity extends Activity implements
                 
         loadSoundImages();        
        
-        loadBackgroundMusic();
-        
         imageView = (ImageView)findViewById(R.id.main_image_id);
 
     } 
@@ -61,36 +64,13 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-        soundPool.resume(bgStreamID);
+        mediaPlayer.start();
     }
     
     @Override
     protected void onPause() {
-        super.onPause();        
-        soundPool.pause(bgStreamID);
-    }
-
-    private void loadBackgroundMusic(){
-     
-        try {
-
-            AssetManager assetManager = getAssets();
-            AssetFileDescriptor descriptor;            
-            descriptor = assetManager.openFd("bg.ogg");
-            final int bgSound = soundPool.load(descriptor, 1);
-        
-            soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
-                @Override
-                public void onLoadComplete(SoundPool soundPool, int sampleId,
-                    int status) {
-                    //play sound loop 
-                    bgStreamID = soundPool.play(bgSound, (float).5, (float).5, 0, -1, 1);                    
-                }
-            });
-             
-        } catch (Exception e) {
-            Log.d("loadBackgroundMusic Exception:", e.toString());
-        }
+        super.onPause();
+        mediaPlayer.pause();
     }
 
     

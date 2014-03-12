@@ -1,8 +1,11 @@
 package com.johnnycarlos.spanish123;
 
+import java.io.IOException;
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
@@ -16,7 +19,8 @@ import android.widget.ImageView;
 
 public class MainActivity extends Activity implements 
     GestureDetector.OnGestureListener,
-    GestureDetector.OnDoubleTapListener{
+    GestureDetector.OnDoubleTapListener,
+    MediaPlayer.OnPreparedListener{
     
     private static final int SWIPE_MIN_DISTANCE = 120;
     
@@ -27,14 +31,14 @@ public class MainActivity extends Activity implements
     private SoundImage soundImage;
 
     private SoundPool soundPool;
-    
+   
     private ImageView imageView;
     
     private SoundImage[] soundImages;
     
     private int index = -1;
     
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +46,24 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
-        
-        // TODO:  Move MediaPlayer to a separate thread
-        mediaPlayer = MediaPlayer.create(this, R.raw.background_music);
+
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(this, Uri.parse("android.resource://com.johnnycarlos.spanish123/" + R.raw.background_music));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mediaPlayer.setLooping(true);
         mediaPlayer.setVolume((float).3, (float).3);
-        mediaPlayer.start(); 
-
+        mediaPlayer.prepareAsync();
+        
         mDetector = new GestureDetectorCompat(this,this);
 
         mDetector.setOnDoubleTapListener(this);
@@ -63,7 +78,7 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();        
         mediaPlayer.start();
     }
     
@@ -73,7 +88,13 @@ public class MainActivity extends Activity implements
         mediaPlayer.pause();
     }
 
-    
+    @Override
+    protected void onDestroy() {
+        super.onStop();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
+   
     /**
      * This method loads all the SoundImages into a global array.
      */
@@ -251,6 +272,13 @@ public class MainActivity extends Activity implements
         // Play the current sound
         soundPool.play(soundImage.poolNumber, 1, 1, 0, 0, 1);
 
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        this.mediaPlayer.start(); 
+
+        
     }
 
 } // end class

@@ -47,33 +47,16 @@ public class MainActivity extends Activity implements
         
         setContentView(R.layout.activity_main);
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mediaPlayer.setDataSource(this, Uri.parse("android.resource://com.johnnycarlos.spanish123/" + R.raw.background_music));
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.setLooping(true);
-        mediaPlayer.setVolume((float).3, (float).3);
-        mediaPlayer.prepareAsync();
+        loadBackgroundMusic();
+        
+        loadSoundImages();
+
+        imageView = (ImageView)findViewById(R.id.main_image_id);
         
         mDetector = new GestureDetectorCompat(this,this);
 
         mDetector.setOnDoubleTapListener(this);
-        
-        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-                
-        loadSoundImages();        
-       
-        imageView = (ImageView)findViewById(R.id.main_image_id);
-
+               
     } 
 
     @Override
@@ -95,11 +78,32 @@ public class MainActivity extends Activity implements
         mediaPlayer = null;
     }
    
+    private void loadBackgroundMusic(){
+
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        
+        try {
+            mediaPlayer.setDataSource(this, Uri.parse("android.resource://com.johnnycarlos.spanish123/" +
+                                                       R.raw.background_music));
+        } catch (IOException e) {
+            Log.d("MediaPlayer Exception:", e.toString());
+        }
+        
+        mediaPlayer.setLooping(true);
+        mediaPlayer.setVolume((float).3, (float).3);
+        mediaPlayer.prepareAsync();
+    }
+    
+    
     /**
      * This method loads all the SoundImages into a global array.
      */
     private void loadSoundImages(){
         try{
+            
+            soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);    
+
             AssetManager assetManager = getAssets();
             AssetFileDescriptor descriptor;
             
@@ -276,9 +280,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        this.mediaPlayer.start(); 
-
-        
+        this.mediaPlayer.start();   
     }
 
 } // end class
